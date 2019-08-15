@@ -5,8 +5,7 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick=
-    {props.onClick}>
+    <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -26,6 +25,9 @@ class Board extends React.Component {
   handleClick(i) {
     const squares = this.state.squares.slice();
     //slice creates a copy of the squares array to modify instead of modifying the existing array.
+    if(calculateWinner(squares) || squares[i]) {
+      return;
+    }
     squares [i] = this.state.xIsNext ? 'X': 'O';
     this.setState({
       squares: squares,
@@ -70,6 +72,14 @@ class Board extends React.Component {
 
 class Game extends React.Component {
   render() {
+    const winner = calculateWinner(this.state.squares);//this will check if a player has won, and will display the winner
+    let status;
+    if(winner) {
+      status = 'Winner' + winner;
+    } else {
+      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+    }
+    
     return (
       <div className="game">
         <div className="game-board">
@@ -83,6 +93,13 @@ class Game extends React.Component {
     );
   }
 }
+
+// ========================================
+
+ReactDOM.render(
+  <Game />,
+  document.getElementById('root')
+);
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -96,17 +113,9 @@ function calculateWinner(squares) {
   ];
   for( let i= 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === suqares[b] && 
-      squares[a] === squares[c]) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
         return squares[a];
       }
   }
   return null;
 }
-// ========================================
-
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
-
