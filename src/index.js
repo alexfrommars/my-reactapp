@@ -25,6 +25,8 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
+  //store the games' state in the parent board component instead of in each square
+  //board component can tell each square what to display by passing a prop
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +35,9 @@ class Board extends React.Component {
     };
   }
   renderSquare(i) {
-    return <Square value ={i} />;//passing prop to value called square
+    return <Square value ={this.state.squares[i]} />;
+    //passing prop to value called square
+    //instruct each square about it's current value and read from it
   }
 
   render() {
